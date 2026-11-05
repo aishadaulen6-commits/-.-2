@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>М. Сәрсеке шығармашылығы — тест</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Marck+Script&family=Nunito:wght@400;600;700;800;900&display=swap');
+:root{--ink:#24352e;--green:#1e5948;--gold:#d7a84b;--cream:#fff9ec;--red:#b9473d}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;color:var(--ink);font-family:'Nunito',sans-serif;background:radial-gradient(circle at 10% 10%,#f4e4bd 0 2px,transparent 3px),radial-gradient(circle at 90% 80%,#d8e5d5 0 2px,transparent 3px),linear-gradient(135deg,#f8f0dc,#e8efe4);background-size:34px 34px,42px 42px,auto;padding:24px 14px}
+.wrap{max-width:900px;margin:auto}.top{background:var(--green);color:#fff8e9;border:5px double var(--gold);border-radius:24px;padding:28px 22px;text-align:center;position:relative;box-shadow:0 12px 30px #24352e22}
+.top:before,.top:after{content:'❋';position:absolute;color:var(--gold);font-size:34px;top:14px}.top:before{left:18px}.top:after{right:18px}
+.kicker{font-family:'Marck Script',cursive;color:#f1d28b;font-size:25px;margin:0 0 5px}.top h1{font-size:clamp(22px,4vw,34px);line-height:1.25;margin:0}.top p{margin:10px 0 0;color:#f5e8c9}
+.ornament{color:var(--gold);letter-spacing:8px;font-size:20px;margin-top:14px}
+.panel{background:#fffdf7eF;border:1px solid #d9c69c;border-radius:20px;padding:22px;margin-top:18px;box-shadow:0 8px 22px #24352e12}
+.progressline{height:9px;background:#e8e2d2;border-radius:20px;overflow:hidden;margin:10px 0 5px}.progress{height:100%;width:0;background:linear-gradient(90deg,#1e5948,#c99b3c);transition:width .25s}
+.meta{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-weight:800;color:#486356;font-size:14px}
+.question{padding:18px 0;border-bottom:1px dashed #d7c69e}.question:last-child{border:0}.qtitle{font-size:18px;font-weight:900;line-height:1.5;margin:0 0 12px}.num{color:#a47725;margin-right:6px}
+.options{display:grid;grid-template-columns:1fr 1fr;gap:9px}.option{display:flex;align-items:flex-start;gap:10px;text-align:left;padding:12px 14px;border:1.5px solid #d9d2bf;background:#fff;border-radius:13px;color:var(--ink);font:700 15px 'Nunito',sans-serif;cursor:pointer;transition:.18s}.option:hover:not(:disabled){border-color:var(--green);background:#f2f7ef}.letter{flex:0 0 27px;height:27px;border-radius:50%;display:grid;place-items:center;background:#f3e8cb;color:#76551c;font-weight:900}.option.correct{border-color:#25845c;background:#e7f5eb;color:#145b3c}.option.wrong{border-color:#c34c42;background:#fff0ed;color:#9e3029}.option:disabled{cursor:default;opacity:1}
+.feedback{font-size:14px;font-weight:800;margin:10px 2px 0;min-height:20px}.feedback.good{color:#19734d}.feedback.bad{color:#b13e35}
+.actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:22px}.btn{border:0;border-radius:30px;padding:13px 24px;font:900 15px 'Nunito',sans-serif;cursor:pointer}.primary{background:var(--green);color:white}.secondary{background:#efe4c8;color:#62491c}.btn:disabled{opacity:.5;cursor:not-allowed}
+.result{text-align:center;display:none}.medal{font-size:58px}.score{font-size:48px;font-weight:900;color:var(--green);margin:5px}.result h2{margin:4px 0}.result p{font-size:17px}.result small{color:#68786e}
+@media(max-width:620px){.options{grid-template-columns:1fr}.panel{padding:16px}.top:before,.top:after{font-size:24px}.top:before{left:9px}.top:after{right:9px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+  <p class="kicker">Білім — таусылмас қазына</p>
+  <h1>М. Сәрсекенің өмірі мен шығармашылығын<br>қайталауға арналған тест</h1>
+  <p>10 сұрақ · Әр дұрыс жауапқа 1 ұпай</p>
+  <div class="ornament">❖ ❋ ❖</div>
+</header>
+<section class="panel" id="quizPanel">
+  <div class="meta"><span id="progressText">Жауап берілді: 0 / 10</span><span>Жалпы ұпай: 10</span></div>
+  <div class="progressline"><div class="progress" id="progress"></div></div>
+  <div id="questions"></div>
+  <div class="actions"><button class="btn primary" id="finish" disabled>Нәтижені көру</button><button class="btn secondary" id="reset">Қайта бастау</button></div>
+</section>
+<section class="panel result" id="result">
+  <div class="medal" id="medal">🏆</div>
+  <h2>Тест аяқталды!</h2>
+  <div class="score" id="score">0 / 10</div>
+  <p id="message"></p>
+  <small>Әр сұрақтағы жауаптарыңызды жоғарыдан қарап шығуға болады.</small>
+  <div class="actions"><button class="btn primary" onclick="window.scrollTo({top:0,behavior:'smooth'})">Жауаптарды қарау</button><button class="btn secondary" id="again">Қайта тапсыру</button></div>
+</section>
+<footer style="text-align:center;padding:22px;color:#617366;font-size:13px">❋ Қазақы нақыштағы білім сынағы ❋</footer>
+</div>
+<script>
+const quiz = [
+ {q:"М. Сәрсекенің қазақ әдебиетіндегі дамытпаған саласы:",a:["Пьеса жазу","Роман-эссе жазу","Өлең жазу","Ғылыми-фантастикалық шығарма жазу","Мақала жазу"],c:2},
+ {q:"М. Сәрсекенің ғылыми-фантастикалық шығармасы:",a:["«Жаңғырық»","«Көмбе»","«Жарылыс»","«Шыңғыс хан»","«Жетінші толқын»"],c:2},
+ {q:"М. Сәрсекенің мамандығы:",a:["Жазушы","Инженер-металлург","Зауыт диспетчері","Инженер-құрылысшы","Драматург"],c:1},
+ {q:"М. Сәрсеке еңбегін арнаған тарихшы:",a:["Н. Мұқаметханұлы","С. Асфендияров","М. Қозыбаев","Е. Бекмаханов","Ә. Марғұлан"],c:3},
+ {q:"«Жаңғырық» романында адамдық, адалдық үшін күрес бар» деген кімнің сөзі?",a:["М. Әуезов","С. Қирабаев","Ө. Жәнібеков","М. Қаратаев","Ә. Марғұлан"],c:3},
+ {q:"М. Сәрсекенің ядролық сынақ жайлы шығармасы:",a:["«Семей қасіреті»","«Невада-Семей»","«Жарылыс»","«Сынақ азабы»","«Радиация күлі»"],c:0},
+ {q:"М. Сәрсекенің спектаклі Семей театрында қанша рет қойылған?",a:["500","603","600","650","550"],c:1},
+ {q:"Қ. Сәтбаев геологиядан өзге де саламен айналысып, қай оқулықты жазды?",a:["География","Геометрия","Тарих","Қазақ тілі","Алгебра"],c:1},
+ {q:"Қ. Сәтбаев қазақтың әнін жинауға кімге көмек көрсеткен?",a:["Л. А. Хамидиға","Е. Г. Брусиловскийге","А. Қ. Жұбановқа","А. В. Затаевичке","С. Г. Рыбаковқа"],c:3},
+ {q:"Қ. Сәтбаев неше жасында 15–16 жастағы жасөспірімдер оқитын мектепке барады?",a:["10","12","13","14","9"],c:1}
+];
+const letters=['А','В','С','D','Е'];let answers=Array(quiz.length).fill(null), locked=Array(quiz.length).fill(false);
+const root=document.getElementById('questions');
+function render(){
+ root.innerHTML='';
+ quiz.forEach((item,i)=>{
+  const section=document.createElement('section');section.className='question';
+  const title=document.createElement('p');title.className='qtitle';title.innerHTML=`<span class="num">${i+1}.</span>${item.q}`;section.appendChild(title);
+  const opts=document.createElement('div');opts.className='options';
+  item.a.forEach((option,j)=>{
+   const b=document.createElement('button');b.className='option';b.type='button';b.disabled=locked[i];
+   if(locked[i]&&j===item.c)b.classList.add('correct');
+   if(locked[i]&&j===answers[i]&&j!==item.c)b.classList.add('wrong');
+   b.innerHTML=`<span class="letter">${letters[j]}</span><span>${option}</span>`;
+   b.addEventListener('click',()=>choose(i,j));opts.appendChild(b);
+  });
+  section.appendChild(opts);
+  const fb=document.createElement('div');fb.className='feedback';fb.id=`fb${i}`;
+  if(locked[i]){const ok=answers[i]===item.c;fb.className='feedback '+(ok?'good':'bad');fb.textContent=ok?'✓ Дұрыс жауап!':`✗ Дұрыс емес. Дұрыс жауап: ${letters[item.c]}) ${item.a[item.c]}`;}
+  section.appendChild(fb);root.appendChild(section);
+ });
+ update();
+}
+function choose(i,j){if(locked[i])return;answers[i]=j;locked[i]=true;render();}
+function update(){const n=locked.filter(Boolean).length;document.getElementById('progressText').textContent=`Жауап берілді: ${n} / ${quiz.length}`;document.getElementById('progress').style.width=(n/quiz.length*100)+'%';document.getElementById('finish').disabled=n!==quiz.length;}
+document.getElementById('finish').addEventListener('click',()=>{
+ const score=quiz.reduce((s,q,i)=>s+(answers[i]===q.c?1:0),0);
+ document.getElementById('score').textContent=`${score} / ${quiz.length}`;
+ document.getElementById('medal').textContent=score>=9?'🏆':score>=7?'🥇':score>=5?'🌟':'📚';
+ document.getElementById('message').textContent=score>=9?'Тамаша! Тақырыпты өте жақсы меңгергенсіз!':score>=7?'Жақсы нәтиже! Тағы аздап қайталаңыз.':score>=5?'Жаман емес! Білімді бекіте түсіңіз.':'Қайта дайындалып, тағы бір байқап көріңіз!';
+ document.getElementById('result').style.display='block';document.getElementById('result').scrollIntoView({behavior:'smooth'});
+});
+function reset(){answers=Array(quiz.length).fill(null);locked=Array(quiz.length).fill(false);document.getElementById('result').style.display='none';render();window.scrollTo({top:0,behavior:'smooth'});}
+document.getElementById('reset').addEventListener('click',reset);document.getElementById('again').addEventListener('click',reset);
+render();
+</script>
+</body>
+</html>
